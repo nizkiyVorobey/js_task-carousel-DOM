@@ -8,35 +8,37 @@ const carouselItems = [...document.querySelectorAll('.carousel__item')];
 const marginBetweenSlisers
   = parseFloat(getComputedStyle(carouselFirstItem).marginRight);
 
+let marginValue = 0;
+
 function slidingPrev(eventPrev) {
   if (eventPrev.target.className.includes('carousel__btn_prev')) {
-    const margin
-      = parseFloat(getComputedStyle(carouselFirstItem).marginLeft)
-      + parseFloat(getComputedStyle(carouselFirstItem).width)
+    marginValue
+      += parseFloat(getComputedStyle(carouselFirstItem).width)
       + marginBetweenSlisers;
 
-    if (margin > 0) {
+    if (marginValue > 0) { // граница слайдера
       return;
     }
-    carouselFirstItem.style.marginLeft = margin + 'px';
-    activeDot(margin);
+
+    // Асинхронный запуск - защита от множетсва кликов при transition
+    marginSet();
   }
 }
 
 function slidingNext(eventNext) {
   if (eventNext.target.className.includes('carousel__btn_next')) {
-    const margin
-      = (parseFloat(getComputedStyle(carouselFirstItem).marginLeft)
-      - parseFloat(getComputedStyle(carouselFirstItem).width)
-      - marginBetweenSlisers);
+    marginValue
+      -= parseFloat(getComputedStyle(carouselFirstItem).width)
+      + marginBetweenSlisers;
 
-    if (
-      Math.abs(margin) > (carouselItems.length
+    if ( // граница слайдера
+      Math.abs(marginValue) > (carouselItems.length
       * parseFloat(getComputedStyle(carouselFirstItem).width))) {
       return;
     }
-    carouselFirstItem.style.marginLeft = margin + 'px';
-    activeDot(margin);
+
+    // Асинхронный запуск - защита от множетсва кликов при transition
+    marginSet();
   }
 }
 
@@ -52,6 +54,13 @@ function activeDot(margin) {
     }
   });
   dotList[activeNumber].classList.add('carousel__dot_active');
+}
+
+function marginSet() {
+  setTimeout(() => {
+    carouselFirstItem.style.marginLeft = marginValue + 'px';
+    activeDot(marginValue);
+  }, 0);
 }
 
 document.addEventListener('click', slidingPrev);
