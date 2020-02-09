@@ -9,17 +9,19 @@ const marginBetweenSlisers
   = parseFloat(getComputedStyle(carouselFirstItem).marginRight);
 
 let marginValue = 0;
+let check = null;
 
 function slidingPrev(eventPrev) {
   if (eventPrev.target.className.includes('carousel__btn_prev')) {
-    marginValue
-      += parseFloat(getComputedStyle(carouselFirstItem).width)
+    check = marginValue + parseFloat(getComputedStyle(carouselFirstItem).width)
       + marginBetweenSlisers;
 
-    if (marginValue > 0) { // граница слайдера
-      return;
+    if (check > 0) { // граница слайдера
+      return false;
     }
 
+    marginValue += parseFloat(getComputedStyle(carouselFirstItem).width)
+    + marginBetweenSlisers;
     // Асинхронный запуск - защита от множетсва кликов при transition
     marginSet();
   }
@@ -27,16 +29,17 @@ function slidingPrev(eventPrev) {
 
 function slidingNext(eventNext) {
   if (eventNext.target.className.includes('carousel__btn_next')) {
-    marginValue
-      -= parseFloat(getComputedStyle(carouselFirstItem).width)
+    check = marginValue - parseFloat(getComputedStyle(carouselFirstItem).width)
       + marginBetweenSlisers;
 
     if ( // граница слайдера
-      Math.abs(marginValue) > (carouselItems.length
+      Math.abs(check) > (carouselItems.length
       * parseFloat(getComputedStyle(carouselFirstItem).width))) {
-      return;
+      return false;
     }
 
+    marginValue -= parseFloat(getComputedStyle(carouselFirstItem).width)
+      + marginBetweenSlisers;
     // Асинхронный запуск - защита от множетсва кликов при transition
     marginSet();
   }
