@@ -1,9 +1,9 @@
 'use strict';
 
-const dotList = [...document.querySelectorAll('.carousel__dot')];
+const dotList = document.querySelectorAll('.carousel__dot');
 
 const carouselFirstItem = document.querySelector('.carousel__item');
-const carouselItems = [...document.querySelectorAll('.carousel__item')];
+const carouselItems = document.querySelectorAll('.carousel__item');
 
 const marginBetweenSliders
   = parseFloat(getComputedStyle(carouselFirstItem).marginRight);
@@ -37,7 +37,8 @@ function slidingNext(eventNext) {
 
     if ( // граница слайдера
       Math.abs(checkMarginValue) > (carouselItems.length
-      * parseFloat(getComputedStyle(carouselFirstItem).width))) {
+      * parseFloat(getComputedStyle(carouselFirstItem).width))
+    ) {
       return false;
     }
 
@@ -49,12 +50,10 @@ function slidingNext(eventNext) {
 }
 
 function activeDot(margin) {
-  const activeNumber
-    = Math.abs(
-      Math.round(
-        margin / parseFloat(getComputedStyle(carouselFirstItem).width)
-      )
-    );
+  let activeNumber = margin
+    / parseFloat(getComputedStyle(carouselFirstItem).width);
+
+  activeNumber = Math.abs(Math.round(activeNumber));
 
   dotList.forEach(dot => {
     if (dot.className.includes('carousel__dot--active')) {
