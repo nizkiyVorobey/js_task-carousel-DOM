@@ -94,7 +94,7 @@ body {
     height: 10px;
     background-color: lightgray;
     border-radius: 50%; }
-  .carousel__dot_active {
+  .carousel__dot--active {
     background-color: gray; }
 
 /*# sourceMappingURL=main.css.map */
